@@ -57,3 +57,5 @@ my.df %>%
   labs(x="contribution",y="age group",fill="contr.")+
   theme_bw(base_size = 14)
 
+ggsave("out/30-figure_decomposition.pdf")
+
