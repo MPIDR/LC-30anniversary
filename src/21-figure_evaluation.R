@@ -1,4 +1,4 @@
-## plotting the evaluation figure
+## plotting the evaluation figure (see Figure 1 in Section 3 of the manuscript)
 
 ## cleaning the workspace
 rm(list=ls(all=TRUE))

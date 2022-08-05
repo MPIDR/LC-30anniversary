@@ -1,4 +1,6 @@
-## decomposition of e0 difference
+## decomposition of e0 difference by so-called Horiuchi's approach
+## difference is decomposed using 
+## actual rates in 2019 and forecast by LC as provided in the original 1992 paper
 
 ## cleaning the workspace
 rm(list=ls(all=TRUE))
@@ -21,32 +23,15 @@ A <- horiuchi(func = e0.mx,
               x = x)
 ## original difference
 (check1 <- e0.mx(x=x,mx=mx2) - e0.mx(x=x,mx=mx1))
+## summing age-specific decomposed contributions
 (check2 <- sum(A))
 
 ## plotting contributions
-age_group <- factor(x,labels=c("0",
-               "1-4",
-               "5-9",
-               "10-14",
-               "15-19",
-               "20-24",
-               "25-29",
-               "30-34",
-               "35-39",
-               "40-44",
-               "45-49",
-               "50-54",
-               "55-59",
-               "60-64",
-               "65-69",
-               "70-74",
-               "75-79",
-               "80-84",
-               "85-89",
-               "90-94",
-               "95-99",
-               "100-104",
-               "105-109"))
+age_low <- seq(5, 105,5)
+age_up <- age_low-1
+age_lab <- c("0", paste(c(1, age_low), c(age_up,109), sep="-"))
+age_group <- factor(x,labels=age_lab)
+
 
 my.df <- tibble(x=x,agegroup=age_group,A=A,sign=sign(A))
 

@@ -1,4 +1,9 @@
-## performing evaluation and making the figure
+## performing evaluation 
+## between actual rates and life expectancy (from the Human Mortality Database) 
+## and values produced using parameters and approaches presented
+## in the original 1992 paper
+
+## (See Section 3 in the manuscript)
 
 ## cleaning the workspace
 rm(list=ls(all=TRUE))
@@ -34,15 +39,15 @@ my.df <- Mx.Usa %>%
   filter(Year %in% t) %>% 
   filter(Age!=110)
 
-## observed rates
+## observed (log-)rates
 MX.obs <- matrix(my.df$Total,m,n)
 LMX.obs <- log(MX.obs)
 
-## computing e0
-e0obs <- apply(MX.obs,2,e0.mx,x=x)
-e0lc <- apply(exp(LMX.lc),2,e0.mx,x=x)
+## computing e0 for each year
+e0obs <- apply(MX.obs, 2, e0.mx, x=x)
+e0lc <- apply(exp(LMX.lc), 2, e0.mx, x=x)
 
-## plot
+## plot observed and LC e0
 plot(t,e0obs,t="p",ylim=range(e0obs,e0lc))
 lines(tF,e0lc,col=2)
 
@@ -55,12 +60,12 @@ lines(tF,kt.up,lty=2,col=2)
 lines(tF,kt.low,lty=2,col=2)
 
 ## compute lower and upper log-rates 
-LMX.lc.up1 <- LCeta(ax,bx,kt.up)
-LMX.lc.low1 <- LCeta(ax,bx,kt.low)
+LMX.lc.up1 <- LCeta(ax, bx, kt.up)
+LMX.lc.low1 <- LCeta(ax, bx, kt.low)
 
-## Coale and Guo adjustment
-LMX.lc.up <- log(apply(exp(LMX.lc.up1),2,CoaleGuoAdj,x=x))
-LMX.lc.low <- log(apply(exp(LMX.lc.low1),2,CoaleGuoAdj,x=x))
+## Coale and Guo adjustment (see 00-functions and 10-LCforecast)
+LMX.lc.up <- log( apply(exp(LMX.lc.up1), 2, CoaleGuoAdj, x=x) )
+LMX.lc.low <- log( apply(exp(LMX.lc.low1), 2, CoaleGuoAdj, x=x) )
 
 ## compute lower and upper e0
 e0lc.up <- apply(exp(LMX.lc.low),2,e0.mx,x=x)
@@ -70,7 +75,7 @@ e0lc.low <- apply(exp(LMX.lc.up),2,e0.mx,x=x)
 lmx2019.obs <- LMX.obs[,which(t==tF[nF])]
 lmx2019.lc <- LMX.lc[,nF]
 
-## adjustment as described by LC
+## adjustment as described by LC (see Appendix B, p. 669-670)
 lmx2019.lc.up <- log(exp(lmx2019.lc)*exp(c.val*bx*sd[nF]))
 lmx2019.lc.low <- log(exp(lmx2019.lc)*exp(-c.val*bx*sd[nF]))
 
